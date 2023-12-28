@@ -1,5 +1,10 @@
 **/target/classes
 /amigosservices/.idea
+
+*.lst
+*.ies
+*.properties
+
 # Compiled class file
 *.class
 

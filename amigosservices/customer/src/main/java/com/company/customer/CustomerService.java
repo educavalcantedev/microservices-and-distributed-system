@@ -2,6 +2,8 @@ package com.company.customer;
 
 import com.company.clients.fraud.FraudCheckHistoryResponse;
 import com.company.clients.fraud.FraudClient;
+import com.company.clients.notification.NotificationClient;
+import com.company.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     private final FraudClient fraudClient;
+
+    private final NotificationClient notificationClient;
 
     public void registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         Customer customer = Customer.builder()
@@ -28,6 +32,15 @@ public class CustomerService {
         if (fraudCheckHistoryResponse.isFraudster()) {
             throw new IllegalStateException("fraudster");
         }
-        // todo: send notification
+
+        // todo: make it async. i.e add to queue
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getId(),
+                        customer.getEmail(),
+                        String.format("Hi %s, welcome to Amigoscode...",
+                                customer.getFirstName())
+                )
+        );
     }
 }
