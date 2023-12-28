@@ -9,8 +9,10 @@
 
     <name>amigosservices</name>
     <url>http://maven.apache.org</url>
+
     <modules>
         <module>customer</module>
+        <module>fraud</module>
     </modules>
 
     <properties>

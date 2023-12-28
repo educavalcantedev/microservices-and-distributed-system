@@ -1,4 +1,4 @@
-/amigosservices/customer/target/classes
+**/target/classes
 /amigosservices/.idea
 # Compiled class file
 *.class
