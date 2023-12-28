@@ -1,8 +1,9 @@
 package com.company.customer;
 
+import com.company.clients.fraud.FraudCheckHistoryResponse;
+import com.company.clients.fraud.FraudClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
@@ -10,7 +11,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    private final RestTemplate restTemplate;
+    private final FraudClient fraudClient;
 
     public void registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         Customer customer = Customer.builder()
@@ -21,12 +22,8 @@ public class CustomerService {
         // todo: check if email valid
         // todo: check if email not taken
         customerRepository.saveAndFlush(customer);
-        // todo: check if fraudster
-        FraudCheckHistoryResponse fraudCheckHistoryResponse = restTemplate.getForObject(
-                "http://fraud/api/v1/fraud-check/{customerId}",
-                FraudCheckHistoryResponse.class,
-                customer.getId()
-        );
+
+        FraudCheckHistoryResponse fraudCheckHistoryResponse = fraudClient.isFraudster(customer.getId());
 
         if (fraudCheckHistoryResponse.isFraudster()) {
             throw new IllegalStateException("fraudster");
