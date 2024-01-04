@@ -1,6 +1,7 @@
 **/target/classes
 /amigosservices/.idea
 .idea
+**/target
 
 *.lst
 *.ies
